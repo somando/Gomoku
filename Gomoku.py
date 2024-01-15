@@ -7,6 +7,7 @@ TARGET = 4
 BOARD_SIZE = TARGET * 4 - 5
 PLAYER = "ME"
 COMPUTER = "PC"
+EMPTY = "  "
 
 # 変数
 board = []
@@ -17,7 +18,7 @@ def init():
   for _ in range(BOARD_SIZE):
     box = []
     for _ in range(BOARD_SIZE):
-      box.append("  ")
+      box.append(EMPTY)
     board.append(box)
   show()
 
@@ -38,52 +39,36 @@ def show():
 def computer_select():
   global board
   board_rotate = board.copy()
-  flag = True
+  place = []
   for i in range(2):
-    if flag == True:
-      for row in range(len(board_rotate)):
-        for column in range(len(board_rotate[row]) - TARGET + 1):
-          box = []
-          for l in range(TARGET):
-            box.append(board_rotate[row][column + l])
-          if box.count(PLAYER) >= TARGET - 2 and box.count(COMPUTER) == 0 or \
-            box.count(PLAYER) == 0 and box.count(COMPUTER) >= TARGET - 2:
-            print("Hi")
-            for k in range(TARGET):
-              if board_rotate[row][column + k] == "  ":
-                s_row = row
-                s_column = column + k
-                flag = False
-                break
-    if flag == True:
-      for row in range(len(board_rotate) - TARGET + 1):
-        for column in range(len(board_rotate) - TARGET + 1):
-          box = []
-          for l in range(TARGET):
-            box.append(board_rotate[row + l][column + l])
-          if box.count(PLAYER) >= TARGET - 2 and box.count(COMPUTER) == 0 or \
-            box.count(PLAYER) == 0 and box.count(COMPUTER) >= TARGET - 2:
-            for k in range(TARGET):
-              if board_rotate[row + k][column + k] == "  ":
-                s_row = row + k
-                s_column = column + k
-                flag = False
-                break
+    for row in range(len(board_rotate)):
+      for column in range(len(board_rotate[row]) - TARGET + 1):
+        box = []
+        for l in range(TARGET + 1):
+          if column + l <= BOARD_SIZE:
+            box.append(board_rotate[row][column + i])
+        if box.count(PLAYER) >= 2 and box.count(EMPTY) >= 1:
+          for l in range(len(box)):
+            if box[l] == EMPTY:
+              if i == 0:
+                place.append([row, column + l])
+              else:
+                place.append([column + l, row])
+    for row in range(len(board_rotate) - TARGET + 1):
+      for column in range(len(board_rotate) - TARGET + 1):
+        box = []
+        for l in range(TARGET + 1):
+          if column + l <= BOARD_SIZE and row + l <= BOARD_SIZE:
+            box.append(board_rotate[row + i][column + i])
+        if box.count(PLAYER) >= 2 and box.count(EMPTY) >= 1:
+          for l in range(len(box)):
+            if box[l] == EMPTY:
+              if i == 0:
+                place.append([row + l, column + l])
+              else:
+                place.append([column + l, row + l])
     board_rotate = np.array(board).T.tolist()
-    if i == 1:
-      i = 2
-  print(i)
-  if i == 0:
-    return add(s_row, s_column, COMPUTER)
-  elif i == 1:
-    return add(s_column, s_row, COMPUTER)
-  else:
-    while 1:
-      s_row = random.randint(0, BOARD_SIZE - 1)
-      s_column = random.randint(0, BOARD_SIZE - 1)
-      if board[s_row][s_column] == "  ":
-        break
-    return add(s_row, s_column, COMPUTER)
+  print(place)
 
 # プレーヤーの選択関数
 def player_select():
@@ -94,7 +79,7 @@ def player_select():
     column = int(key_input[1]) - 1
     if row >= 0 and row < BOARD_SIZE and \
       column >= 0 and column < BOARD_SIZE and \
-      board[row][column] == "  ":
+      board[row][column] == EMPTY:
       break
     else:
       print("入力内容が正しくありません。入力をやり直してください。")
@@ -103,7 +88,7 @@ def player_select():
 # 追加関数
 def add(row, column, who):
   global board
-  if board[row][column] == "  ":
+  if board[row][column] == EMPTY:
     board[row][column] = who
   return judge(board)
 
