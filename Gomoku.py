@@ -13,11 +13,12 @@ board = []
 # 初期化関数
 def init():
   global board
-  box = []
   for _ in range(BOARD_SIZE):
-    box.append("  ")
-  for _ in range(BOARD_SIZE):
+    box = []
+    for _ in range(BOARD_SIZE):
+      box.append("  ")
     board.append(box)
+  show()
 
 def show():
   global board
@@ -78,10 +79,9 @@ def judge():
 
 def main():
   init()
-  result = judge()
-  while result == None:
-    show()
+  while judge() == None:
     player_select()
-  print(result + "の勝利！")
+    show()
+  print(judge() + "の勝利！")
 
 main()
