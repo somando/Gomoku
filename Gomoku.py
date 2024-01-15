@@ -1,6 +1,4 @@
 # ライブラリの読み込み
-import shutil
-import datetime
 import numpy as np
 
 # 定数
@@ -11,23 +9,15 @@ COMPUTER = "CP"
 
 # 変数
 board = []
-logs = []
 
 # 初期化関数
 def init():
   global board
-  terminal_size = shutil.get_terminal_size()
-  log("Game Start")
   box = []
   for _ in range(BOARD_SIZE):
     box.append("  ")
   for _ in range(BOARD_SIZE):
     board.append(box)
-
-def log(message):
-  global logs
-  now = datetime.datetime.now()
-  logs.append("[" + str(now.hour) + ":" + str(now.minute) + ":" + str(now.second) + "] " + message)
 
 def show():
   global board
@@ -43,21 +33,23 @@ def show():
 
 def player_select():
   while 1:
-    key = input("行・列の順に数値を空白区切りで入力してください。\n").split(" ")
-    input = {"row": int(key[0]), "column": int(key[1])}
-    if input["row"] > 0 and input["row"] <= BOARD_SIZE and \
-      input["column"] > 0 and input["column"] <= BOARD_SIZE and \
-      board[input["row"]][input["column"]] == "  ":
+    key_input = input("行・列の順に数値を空白区切りで入力してください。\n")
+    key_input = key_input.split(' ')
+    row = int(key_input[0]) - 1
+    column = int(key_input[1]) - 1
+    if row >= 0 and row < BOARD_SIZE and \
+      column >= 0 and column < BOARD_SIZE and \
+      board[row][column] == "  ":
       break
     else:
       print("入力内容が正しくありません。入力をやり直してください。")
-  add(input["row"], input["column"], PLAYER)
+  add(row, column, PLAYER)
   result = judge()
   return result
 
-def add(row, column, player):
+def add(row, column, who):
   global board
-  board[row][column] = player
+  board[row][column] = who
 
 def judge():
   global board
@@ -88,7 +80,8 @@ def main():
   init()
   result = judge()
   while result == None:
+    show()
     player_select()
-    show
+  print(result + "の勝利！")
 
 main()
