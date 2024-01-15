@@ -21,6 +21,7 @@ def init():
     board.append(box)
   show()
 
+# 表示関数
 def show():
   global board
   print("    ", end="")
@@ -33,6 +34,7 @@ def show():
       print(board[row][column] + "|", end="")
     print()
 
+# COMPUTERの選択関数
 def computer_select():
   global board
   board_rotate = board.copy()
@@ -83,6 +85,7 @@ def computer_select():
         break
     return add(s_row, s_column, COMPUTER)
 
+# プレーヤーの選択関数
 def player_select():
   while 1:
     key_input = input("行・列の順に数値を空白区切りで入力してください。\n")
@@ -97,12 +100,14 @@ def player_select():
       print("入力内容が正しくありません。入力をやり直してください。")
   return add(row, column, PLAYER)
 
+# 追加関数
 def add(row, column, who):
   global board
   if board[row][column] == "  ":
     board[row][column] = who
   return judge(board)
 
+# 勝敗判定
 def judge(board_rotate):
   for i in range(2):
     for row in board_rotate:
@@ -126,6 +131,7 @@ def judge(board_rotate):
     board_rotate = np.array(board).T.tolist()
   return None
 
+# メイン関数
 def main():
   global board
   init()
