@@ -86,6 +86,8 @@ def computer_select():
                 place.append([row, column + l])
               else:
                 place.append([column + l, row])
+    board_rotate = np.array(board).T.tolist()
+  for i in range(2):
     for row in range(len(board_rotate) - TARGET + 1):
       for column in range(len(board_rotate) - TARGET + 1):
         box = []
@@ -99,8 +101,14 @@ def computer_select():
                 place.append([row + l, column + l])
               else:
                 place.append([column + l, row + l])
-    board_rotate = np.array(board).T.tolist()
+    board_swap = []
+    for row in range(len(board)):
+      board_swap.append(board[-1-row])
+    board_rotate = np.array(board_swap).T.tolist()
   place_list = unique(place)
+  for list in place_list:
+    if board[list[0]][list[1]] != EMPTY:
+      place_list.remove(list)
   if len(place_list) == 0:
     count = 0
     com_place = []
@@ -124,8 +132,8 @@ def computer_select():
       if board[row][column] == EMPTY:
         break
   else:
-    row = place_list[0][0]
-    column = place_list[0][1]
+      row = place_list[0][0]
+      column = place_list[0][1]
   add_log(COMPUTER + "が" + str(row + 1) + "行" + str(column + 1) + "列に置きました。")
   return add(row, column, COMPUTER)
 
@@ -168,6 +176,8 @@ def judge(board_rotate):
           return PLAYER
         elif box.count(COMPUTER) == TARGET:
           return COMPUTER
+    board_rotate = np.array(board).T.tolist()
+  for i in range(2):
     for row in range(len(board_rotate) - TARGET + 1):
       for column in range(len(board_rotate) - TARGET + 1):
         box = []
@@ -177,7 +187,10 @@ def judge(board_rotate):
           return PLAYER
         elif box.count(COMPUTER) == TARGET:
           return COMPUTER
-    board_rotate = np.array(board).T.tolist()
+    board_swap = []
+    for row in range(len(board)):
+      board_swap.append(board[-1-row])
+    board_rotate = np.array(board_swap).T.tolist()
   return None
 
 # メイン関数
