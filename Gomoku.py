@@ -35,6 +35,7 @@ def show_log():
   for log in range(-3, 0):
     print(logs[log][0] + " " + logs[log][1])
   print("==============================================")
+  print()
 
 # 初期化関数
 def init():
