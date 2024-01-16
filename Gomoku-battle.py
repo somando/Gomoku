@@ -1,6 +1,7 @@
 # ライブラリの読み込み
 import numpy as np
 import os
+import random
 import platform
 import datetime
 
@@ -9,6 +10,7 @@ TARGET = 4
 BOARD_SIZE = TARGET * 4 - 5
 PLAYER1 = "ME"
 PLAYER2 = "YO"
+NO_ZONE = "XX"
 EMPTY = "  "
 F_AROUND = [[-1, -1], [-1, 0], [-1, 1], [0, 1], [1, 1], [1, 0], [1, -1], [0, -1]]
 S_AROUND = [[-2, -2], [-2, 0], [-2, 2], [0, 2], [2, 2], [2, 0], [2, -2], [0, -2]]
@@ -73,6 +75,7 @@ def player_select(player):
     print()
     key_input = input(player + "のターンです。行・列の順に数値を空白区切りで入力してください。\n")
     if key_input == "exit":
+      print()
       exit()
     key_input = key_input.split(' ')
     if len(key_input) == 2 and key_input[0].isdigit() and key_input[1].isdigit():
@@ -86,6 +89,17 @@ def player_select(player):
       print("入力内容が正しくありません。入力をやり直してください。")
   add_log(player + "が" + str(row + 1) + "行" + str(column + 1) + "列に置きました。")
   return add(row, column, player)
+
+# 置けない場所の選定関数
+def no_zone():
+  global board
+  while 1:
+    row = random.randint(2, BOARD_SIZE - 3)
+    column = random.randint(2, BOARD_SIZE - 3)
+    if board[row][column] == EMPTY:
+      break
+  add_log(str(row + 1) + "行" + str(column + 1) + "列が妨害されました。")
+  add(row, column, NO_ZONE)
 
 # 追加関数
 def add(row, column, who):
@@ -128,6 +142,8 @@ def main():
   global board
   init()
   while 1:
+    no_zone()
+    show()
     player_select(PLAYER1)
     show()
     if judge(board) != None:
@@ -140,4 +156,5 @@ def main():
   add_log("プログラムを終了します。")
   show()
 
-main()
+if __name__ == "__main__":
+  main()
