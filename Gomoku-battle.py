@@ -12,8 +12,6 @@ PLAYER1 = "ME"
 PLAYER2 = "YO"
 NO_ZONE = "XX"
 EMPTY = "  "
-F_AROUND = [[-1, -1], [-1, 0], [-1, 1], [0, 1], [1, 1], [1, 0], [1, -1], [0, -1]]
-S_AROUND = [[-2, -2], [-2, 0], [-2, 2], [0, 2], [2, 2], [2, 0], [2, -2], [0, -2]]
 OS = platform.system()
 if OS == "Windows":
   CLEAR = "cls"
@@ -30,6 +28,7 @@ def add_log(message):
   now = datetime.datetime.now()
   logs.append(["[" + now.strftime("%H:%M:%S.%f") + "]", message])
 
+# ログ表示関数
 def show_log():
   global logs
   print("==================== Logs ====================")
@@ -142,8 +141,6 @@ def main():
   global board
   init()
   while 1:
-    no_zone()
-    show()
     player_select(PLAYER1)
     show()
     if judge(board) != None:
@@ -152,6 +149,8 @@ def main():
     show()
     if judge(board) != None:
       break
+    no_zone()
+    show()
   add_log(judge(board) + "が勝利しました。")
   add_log("プログラムを終了します。")
   show()
